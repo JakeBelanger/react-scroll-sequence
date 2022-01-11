@@ -1,0 +1,1 @@
+# A react component for creating smooth image sequence animations on scroll

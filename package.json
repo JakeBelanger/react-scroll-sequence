@@ -1,0 +1,26 @@
+{
+  "name": "react-scroll-sequence",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-spring": "^9.4.1"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "devDependencies": {
+    "react-scripts": "^5.0.0",
+    "@babel/cli": "^7.16.8",
+    "@babel/core": "^7.16.7",
+    "@babel/preset-env": "^7.16.8"
+  }
+}
