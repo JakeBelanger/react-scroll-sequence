@@ -1,7 +1,16 @@
 {
   "name": "react-scroll-sequence",
-  "version": "0.1.0",
-  "private": true,
+  "description": "react component for creating smooth image sequence animations on scroll",
+  "version": "0.2.0",
+  "keywords": ["react", "component", "scroll", "images"],
+  "private": false,
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "files": [ "dist", "README.md" ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JakeBelanger/react-scroll-sequence.git"
+},
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "react": "^17.0.2",
@@ -10,7 +19,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files"
+    "build": "IF EXIST dist rmdir /S /Q dist && babel \"src\\lib\" --out-dir dist"
   },
   "eslintConfig": {
     "extends": [
@@ -22,5 +31,17 @@
     "@babel/cli": "^7.16.8",
     "@babel/core": "^7.16.7",
     "@babel/preset-env": "^7.16.8"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

@@ -2,8 +2,7 @@ export const createLoadingQueue = (l) => [0, l >> 1, l - 1].concat(Array(l)
     .fill(0)
     .map((_, i) => i)
     .sort((e, n) => (
-        Math.abs(e - l / 2) -
-        Math.abs(n - l / 2)
+        (e % 5) - (n % 5)
     )))
 
 /**

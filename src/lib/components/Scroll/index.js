@@ -12,8 +12,8 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
     const containerRef = useRef(null)
 
 
-    const [{ ani }, api] = useSpring(() => ({
-        ani: 0,
+    const [{ spring }, api] = useSpring(() => ({
+        spring: 0,
         config: config.slow,
         onChange: () => draw()
     }))
@@ -26,11 +26,10 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
             if (images[target - i]) return images[target - i]
             if (images[target + i]) return images[target + i]
         }
-        return 0
     }
 
     function draw() {
-        const val = ~~ani.get();
+        const val = ~~spring.get();
         const ctx = canvasRef.current.getContext('2d');
         const image = nearestLoadedImage(val);
         if (image?.width) {
@@ -51,18 +50,19 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
         const onLoad = () => {
             img.removeEventListener('load', onLoad);
             loadedImages.current[e] = img
+                
+            if (e === 0) {
+                draw()
+            }
             loadNextImage();
+
+            
         }
 
+        // prepare the image
         const img = new Image();
         img.addEventListener('load', onLoad);
         img.src = images[e];
-
-
-        if (e === 0) {
-            // Draw on next tick
-            setTimeout(draw, 0)
-        }
 
     }
 
@@ -84,7 +84,7 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
 
         if (starts === 'out') u += clientHeight;
         if (ends === 'in') d -= clientHeight;
-        if (starts == 'in') d -= clientHeight;
+        if (starts === 'in') d -= clientHeight;
         // start: out, ends: out
         // const value = ((clientOffsety + clientHeight) - offsetY) / (clientHeight + elementHeight) * 100;
 
@@ -102,19 +102,21 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
     }
 
 
-    const handleScroll = (e) => {
-        const percent = getPercentScrolled()
-        api.start({ ani: percent * images.length })
-    }
+    
 
     useEffect(() => {
         // Start loading images
         loadNextImage()
 
+        const handleScroll = (e) => {
+            const percent = getPercentScrolled()
+            api.start({ spring: percent * images.length })
+        }
+
         // Handle resize
         function updateSize() {
-            const w = window.innerWidth;
-            const h = window.innerHeight;
+            const w = canvasRef.current.parentElement.clientWidth;
+            const h = canvasRef.current.parentElement.clientHeight;
             const canvas = canvasRef.current
 
             canvas.width = w
@@ -127,10 +129,12 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
         window.addEventListener('resize', updateSize);
         window.addEventListener('scroll', handleScroll)
         updateSize();
+
+        console.log(createLoadingQueue(20))
         return () => {
             window.removeEventListener('resize', updateSize);
         }
-    }, [])
+    }, [draw, loadNextImage])
 
     return (
         <div
@@ -141,14 +145,15 @@ const ScrollSequence = ({ children, images, priorityFrames, starts = "in", ends 
         >
             <div
                 style={{
-                    width: '100vw',
                     height: '100vh',
-                    position: "sticky", top: '0px'
+                    width: '100%',
+                    position: "sticky", 
+                    inset: '0'
                 }}>
                 <canvas ref={canvasRef}/>
                 
             </div>
-            <div style={{position: 'relative', zIndex: 1, ...style}} {...rest}>
+            <div style={{position: 'relative', ...style}} {...rest}>
                 {children}
             </div>
         </div>);

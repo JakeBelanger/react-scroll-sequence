@@ -1,3 +1,3 @@
 import ScrollSequence from "./components/Scroll";
 
-export {ScrollSequence}
+export default ScrollSequence

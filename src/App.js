@@ -1,5 +1,5 @@
 import ScrollSequence from './lib/components/Scroll';
-
+import './app.css'
 const appleSequenceImages = [];
 // 131
 for (let i = 0; i <= 131; i++) {
